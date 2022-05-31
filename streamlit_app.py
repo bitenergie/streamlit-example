@@ -4,6 +4,10 @@ import math
 import pandas as pd
 import streamlit as st
 
+import plotly.figure_factory as ff
+import plotly.graph_objects as go
+import numpy as np
+
 """
 # Welcome to Streamlit!
 
@@ -36,3 +40,46 @@ with st.echo(code_location='below'):
     st.altair_chart(alt.Chart(pd.DataFrame(data), height=500, width=500)
         .mark_circle(color='#0068c9', opacity=0.5)
         .encode(x='x:Q', y='y:Q'))
+    
+        
+    # Add histogram data
+    x1 = np.random.randn(200) - 2
+    x2 = np.random.randn(200)
+    x3 = np.random.randn(200) + 2
+    
+    # Group data together
+    hist_data = [x1, x2, x3]
+    
+    group_labels = ['Group 1', 'Group 2', 'Group 3']
+    
+    # Create distplot with custom bin_size
+    fig = ff.create_distplot(
+             hist_data, group_labels, bin_size=[.1, .25, .5])
+    
+    # Plot!
+    st.plotly_chart(fig, use_container_width=True)
+    
+    
+    
+
+
+
+
+
+fig_sankey = go.Figure(data=[go.Sankey(
+    node = dict(
+      pad = 15,
+      thickness = 20,
+      line = dict(color = "black", width = 0.5),
+      label = ["A1", "A2", "B1", "B2", "C1", "C2"],
+      color = "blue"
+    ),
+    link = dict(
+      source = [0, 1, 0, 2, 3, 3], # indices correspond to labels, eg A1, A2, A1, B1, ...
+      target = [2, 3, 3, 4, 4, 5],
+      value = [8, 4, 2, 8, 4, 2]
+  ))])
+fig_sankey.update_layout(title_text="Basic Sankey Diagram", font_size=10)
+
+st.plotly_chart(fig_sankey, use_container_width=True)
+
